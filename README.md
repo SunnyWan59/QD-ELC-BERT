@@ -3,6 +3,7 @@ My own implementation of the babyLM ELC BERT, given by the 2023 paper "Not all l
 
 #Bibliography
 
+```bibtex
 @inproceedings{georges-gabriel-charpentier-samuel-2023-layers,
     title = "Not all layers are equally as important: Every Layer Counts {BERT}",
     author = "Georges Gabriel Charpentier, Lucas  and
@@ -27,3 +28,4 @@ My own implementation of the babyLM ELC BERT, given by the 2023 paper "Not all l
     doi = "10.18653/v1/2023.conll-babylm.20",
     pages = "238--252",
 }
+```
