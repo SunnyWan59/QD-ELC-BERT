@@ -3,9 +3,9 @@ import torch.nn as nn
 
 class Config():
     def __init__(self,
-                 vocab_size,
-                 model_dimension,
-                 num_attention_heads,
+                 vocab_size = 30522,
+                 model_dimension = 768,
+                 num_attention_heads = 12,
                  sentence_vocab_size = 2,
                  sequence_length = 512,
                  dropout_prob = 0.1
