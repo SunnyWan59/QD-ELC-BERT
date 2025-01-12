@@ -4,7 +4,9 @@ import math
 
 
 class TokenEmbedding(nn.Module):
-    def __init__(self, vocab_size, embedding_size):
+    def __init__(self,
+                 config, 
+                 vocab_size, embedding_size):
         ''' class for the embedding layer
 
         Attriubutes
