@@ -17,7 +17,7 @@ class Embedding(nn.Module):
         super(Embedding, self).__init__()
         self.config = config
         self.token_embedding = nn.Embedding(config.vocab_size, config.model_dimension)
-        self.position_embeddings = nn.Embedding(config.sequence_length, config.model_dimension)
+        self.position_embeddings = AbsolutePositionEmbedding(config)
         self.segment_embedding = nn.Embedding(config.sentence_vocab_size, config.model_dimension)
         self.layer_norm = nn.LayerNorm(config.model_dimension, eps=1e-12)
         self.dropout = nn.Dropout(config.dropout_prob)
@@ -45,8 +45,12 @@ class Embedding(nn.Module):
             the embedded input
         '''
         token_embedded = self.token_embedding(input_ids)
-        position_embedded = self.position_embeddings(torch.arange(input_ids.size(1)).unsqueeze(0).to(input_ids.device))
+        print(torch.arange(input_ids.size(0)).unsqueeze(0).to(input_ids.device))
+        position_embedded = self.position_embeddings(input_ids)
         segment_embedded = self.segment_embedding(segment_ids)
+        # print(token_embedded.size())
+        # print(position_embedded.size())
+        # print(segment_embedded.size())
         embedded = token_embedded + position_embedded + segment_embedded
         embedded = self.layer_norm(embedded)
         embedded = self.dropout(embedded)
@@ -140,3 +144,27 @@ class _SegmentationEmbedding(nn.Module):
     
     def forward(self,x):
         return x + self._create_segmentation_embedding(self.input_ids, self.sep_token_id)
+    
+
+class AbsolutePositionEmbedding(nn.Module):
+    def __init__(self, config):
+        super(AbsolutePositionEmbedding, self).__init__()
+        self.position_embeddings = nn.Embedding(config.sequence_length , config.model_dimension)
+        #ininitilize the position embeddings with random weights
+        nn.init.normal_(self.position_embeddings.weight, mean=0, std=0.02)
+    
+    def forward(self, input_ids):
+        '''
+        
+        Parameters
+        ----------
+        input_ids : torch.Tensor
+            the tokenized input IDs
+        '''
+        seq_length = input_ids.size(1)
+        position_ids = torch.arange(seq_length, dtype=torch.long, device=input_ids.device)
+        position_ids = position_ids.unsqueeze(0).expand_as(input_ids)  # Shape: (batch_size, seq_length)
+        
+        # Lookup position embeddings
+        position_embeddings = self.position_embeddings(position_ids)
+        return position_embeddings
