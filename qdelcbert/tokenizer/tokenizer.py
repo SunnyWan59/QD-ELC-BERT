@@ -23,12 +23,35 @@ class Tokenizer():
 
         Attributes
         ----------
-        text: str
+        text: [str]
             the input text
 
         Returns
         -------
-        list
-            the tokenized text
+        (torch.Tensor, torch.Tensor)
+            the tokenized text, and the attention mask 
         '''
-        return self.tokenizer.tokenize(text)
+        encoding = self.tokenizer.batch_encode_plus(
+            text,                	
+            padding=True,          	
+            truncation=True,       	
+            return_tensors='pt',  	
+            add_special_tokens=True
+        )   
+
+        return((encoding['input_ids'], encoding['attention_mask']))
+    
+    def decode(self, token_ids):
+        '''decodes the tokenized text
+
+        Attributes
+        ----------
+        token_ids: torch.Tensor
+            the tokenized text
+
+        Returns
+        -------
+        str
+            the decoded text
+        '''
+        return self.tokenizer.decode(token_ids)

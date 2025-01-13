@@ -23,7 +23,11 @@ class Embedding(nn.Module):
         self.dropout = nn.Dropout(config.dropout_prob)
     
     def __str__(self):
-        return (f"Embedding Layer with {self.config.vocab_size} tokens")
+        return (
+            "self.token_embedding: " + str(self.token_embedding) + "\n" +
+            "self.position_embeddings: " + str(self.position_embeddings) + "\n"
+            "self.segment_embedding: " + str(self.segment_embedding) + "\n"
+                )
 
     def forward(self, input_ids, segment_ids):
         '''forward pass for the embedding layer
@@ -47,7 +51,7 @@ class Embedding(nn.Module):
         embedded = self.layer_norm(embedded)
         embedded = self.dropout(embedded)
         return embedded
-    
+
 class MultiHeadAttention(nn.Module):
     def __init__(self, config):
         ''' class for the multi-head attention layer

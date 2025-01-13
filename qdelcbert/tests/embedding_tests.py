@@ -11,11 +11,15 @@ from qdelcbert.model.model import Embedding, MultiHeadAttention
 def test_tokenizer():
     tokenizer = Tokenizer()
     assert tokenizer.tokenizer is not None
-    print(tokenizer.tokenize("Using a Transformer network is simple"))
+    text = ["Using a Transformer network is simple.", "I love transformers!"]
+    ids = tokenizer.tokenize(text)
+    print(ids)
+    comb_ids = torch.cat((ids[0][0],ids[0][1][1:]))
+    print(comb_ids)
+    print(tokenizer.decode(comb_ids))
 
 def test_embedding():
     config = Config(
-        vocab_size=6,
         model_dimension=4,
         num_attention_heads=2,
     )
@@ -23,18 +27,14 @@ def test_embedding():
     print(embedding)
 
     tokenizer = Tokenizer()
-    tokenizer.tokenize("Using a Transformer network is simple")
-    
-    
+    text = ["Using a Transformer network is simple"]
+    input = tokenizer.tokenize(text)[0][0]
 
-
-    # input_ids = torch.tensor([[1, 2, 3, 4, 5]])
-    # segment_ids = torch.tensor([[0, 0, 0, 0, 0]])
-    # output = embedding(input_ids, segment_ids)
-    # assert output.size() == (1, 5, 768)
-    # print("Embedding test passed")
+    segment_ids = torch.tensor([[0, 0, 0, 0, 0]])
+    output = embedding(input, segment_ids)
+    print(output.size())
 
 
 if __name__ == "__main__":
-    test_tokenizer()
+    # test_tokenizer()
     test_embedding()
