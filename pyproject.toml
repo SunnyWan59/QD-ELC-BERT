@@ -1,0 +1,17 @@
+[build-system]
+requires = ["flit_core>=3.4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "qdelcbert"
+version = "0.1.0"
+description = "My own implementation of Every Layer Counts BERT"
+authors = [
+    { name="Sunny Wan", email="Sunnywan2020@gmail.com" }
+]
+readme = "README.md"
+dependencies = [
+    "torch",
+    "numpy",
+    "transformers"
+]

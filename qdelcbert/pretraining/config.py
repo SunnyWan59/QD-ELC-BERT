@@ -17,3 +17,4 @@ class Config():
         self.num_attention_heads = num_attention_heads
         self.sentence_vocab_size = sentence_vocab_size
         self.sequence_length = sequence_length
+        self.dropout_prob = dropout_prob

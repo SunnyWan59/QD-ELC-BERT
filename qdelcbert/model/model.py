@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import math 
-from pretraining.config import Config
+from qdelcbert.pretraining.config import Config
+
 
 
 class Embedding(nn.Module):
@@ -21,6 +22,9 @@ class Embedding(nn.Module):
         self.layer_norm = nn.LayerNorm(config.model_dimension, eps=1e-12)
         self.dropout = nn.Dropout(config.dropout_prob)
     
+    def __str__(self):
+        return (f"Embedding Layer with {self.config.vocab_size} tokens")
+
     def forward(self, input_ids, segment_ids):
         '''forward pass for the embedding layer
 
@@ -103,7 +107,7 @@ class FeedForwardNetwork(nn.Module):
         
 
 
-class SegmentationEmbedding(nn.Module):
+class _SegmentationEmbedding(nn.Module):
     def __init__(self,
                  input_ids,
                  sep_token_id = 102
@@ -117,7 +121,7 @@ class SegmentationEmbedding(nn.Module):
         sep_tocken_id: int default = 102
             token ID for the [SEP] token
         '''
-        super(SegmentationEmbedding, self).__init__()
+        super(_SegmentationEmbedding, self).__init__()
         self.input_ids = input_ids
         self.sep_token_id = sep_token_id
 
