@@ -38,7 +38,6 @@ class Tokenizer():
             return_tensors='pt',  	
             add_special_tokens=True
         )   
-
         return((encoding['input_ids'], encoding['attention_mask']))
     
     def decode(self, token_ids):
