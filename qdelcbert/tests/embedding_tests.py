@@ -11,14 +11,15 @@ from qdelcbert.model.model import Embedding, MultiHeadAttention, _SegmentationEm
 def test_tokenizer():
     tokenizer = Tokenizer()
     assert tokenizer.tokenizer is not None
-    text = ["Using a Transformer network is simple", "I love transformers!"]
+    text = "Using a Transformer network is simple"
     ids = tokenizer.tokenize(text)
     print(ids)
-    # print(ids[0].size(1))
     print(tokenizer.decode(ids[0][0]))
-    # comb_ids = torch.cat((ids[0][0],ids[0][1][1:]))
-    # print(comb_ids)
-    # print(tokenizer.decode(comb_ids))
+
+    text2 = '[CLS][SEP]Hi[SEP]'
+    ids2 = tokenizer.tokenize(text2)
+    print(ids2)
+
 
 def test_embedding():
     config = Config(
@@ -49,6 +50,6 @@ def test_seg_embedding():
     print(seg_embedding._create_segmentation_mask(input))
 
 if __name__ == "__main__":
-    # test_tokenizer()
-    test_embedding()
+    test_tokenizer()
+    # test_embedding()
     # test_seg_embedding()
