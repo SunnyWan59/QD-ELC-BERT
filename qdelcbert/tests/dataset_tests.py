@@ -9,13 +9,17 @@ def test_dataset():
 def test_tokenizer():
     tokenizer = Tokenizer()
     dataset = MPRCDataset() 
-    datum = [dataset[0]]
-    # print(datum[0])
-    # print(tokenizer.tokenize(datum[0]))
-    # print(datum)
-    tokenized = tokenizer.tokenize_pair(datum[0])
-    print(tokenized)
+    datum = dataset[0]
+    tokenized = tokenizer.tokenize_pair(datum)
     print(tokenizer.decode(tokenized[0][0]))
+    sentences = []
+    for i in range(3):
+        sentences.append(dataset[i])
+    tokenized = tokenizer.tokenize_multiple(sentences)
+    print(tokenized)
+    
+
+
 if __name__ == "__main__":
     test_tokenizer()
     # test_dataset()

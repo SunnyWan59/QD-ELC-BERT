@@ -9,26 +9,18 @@ class MPRCDataset():
 
         Attributes
         ----------
-
+        raw_datasets : dict
+            the raw datasets
+        train_dataset : dict
+            the training dataset
+        test_dataset : dict
+            the test dataset
         '''
         self.raw_datasets = load_dataset("glue", "mrpc")
         self.train_dataset = self.raw_datasets['train']
         self.test_dataset = self.raw_datasets['test']
-
-    def __getitem__(self, idx):
-        '''returns the item at the given index
-
-        Attributes
-        ----------
-        idx: int
-            the index of the item
-
-        Returns
-        -------
-        dict
-            the item at the given index
-        '''
-        return (self.train_dataset[idx]['sentence1'], self.train_dataset[idx]['sentence2'])
+        # This is SUPER inefficient, but it's just for now.
+    
     
 
     def __len__(self):

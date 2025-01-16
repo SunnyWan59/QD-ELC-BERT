@@ -53,6 +53,20 @@ class Tokenizer():
         sentence = sentencePair[0] + ' [SEP] ' + sentencePair[1]
         return self.tokenize(sentence)
     
+    def tokenize_multiple(self, sentencePairs):
+        '''Tokenizes multiple sentences
+        
+        Attributes
+        ----------
+        sentencePairs: list
+            the list of sentences
+        '''
+        tokenized = []
+        for sentence in sentencePairs:
+            print(sentence)
+            tokenized.append(self.tokenize_pair(sentence))
+        return tokenized
+    
     def decode(self, token_ids):
         '''decodes the tokenized text
 
