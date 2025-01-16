@@ -1,6 +1,7 @@
 # QD-ELC-BERT
 My own implementation of the babyLM ELC BERT, as described in the 2023 paper "Not all layers are equally as important: Every Layer Counts BERT" by Charpentier and Samuel. 
 
+
 #Bibliography
 
 ```bibtex

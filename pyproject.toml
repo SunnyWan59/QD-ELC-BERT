@@ -13,5 +13,7 @@ readme = "README.md"
 dependencies = [
     "torch",
     "numpy",
-    "transformers"
+    "transformers",
+    "datasets",
+    "tokenizers"
 ]

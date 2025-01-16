@@ -18,7 +18,6 @@ class Embedding(nn.Module):
         self.config = config
         self.token_embedding = nn.Embedding(config.vocab_size, config.model_dimension)
         self.position_embeddings = _AbsolutePositionEmbedding(config)
-        # self.segment_embedding = nn.Embedding(config.sentence_vocab_size, config.model_dimension)
         self.segment_embedding = _SegmentationEmbedding(config)
         self.layer_norm = nn.LayerNorm(config.model_dimension, eps=1e-12)
         self.dropout = nn.Dropout(config.dropout_prob)
@@ -49,9 +48,6 @@ class Embedding(nn.Module):
         print(torch.arange(input_ids.size(0)).unsqueeze(0).to(input_ids.device))
         position_embedded = self.position_embeddings(input_ids)
         segment_embedded = self.segment_embedding(input_ids)
-        # print(token_embedded.size())
-        # print(position_embedded.size())
-        # print(segment_embedded.size())
         embedded = token_embedded + position_embedded + segment_embedded
         embedded = self.layer_norm(embedded)
         embedded = self.dropout(embedded)
@@ -195,3 +191,14 @@ class _AbsolutePositionEmbedding(nn.Module):
         # Lookup position embeddings
         position_embeddings = self.position_embeddings(position_ids)
         return position_embeddings
+    
+    class BertEncoder(nn.Module):
+        def __init__(self, config):
+            ''' class for the bert encoder
+            '''
+        
+        def forward(self, input_ids, mask=None):
+            '''forward pass for the bert encoder
+            
+            '''
+            pass
