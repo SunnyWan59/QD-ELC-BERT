@@ -18,3 +18,4 @@ class Config():
         self.sentence_vocab_size = sentence_vocab_size
         self.sequence_length = sequence_length
         self.dropout_prob = dropout_prob
+        self.ffn_hidden_size = model_dimension * 4

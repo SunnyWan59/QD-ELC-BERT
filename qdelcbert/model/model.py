@@ -110,9 +110,31 @@ class MultiHeadAttention(nn.Module):
 class FeedForwardNetwork(nn.Module):
     def __init__(self, config):
         ''' class for the feed forward mlp layer
+
+        Attributes
+        ----------
+        config: Config
+            the configuration of the model
         '''
         super(FeedForwardNetwork, self).__init__()
         self.config = config
+        self.lin1 = nn.Linear(config.model_dimension, config.ffn_hidden_size)   
+        self.lin2 = nn.Linear(config.ffn_hidden_size, config.model_dimension)
+
+    def forward(self, x):
+        '''forward pass for the feed forward network
+
+        Attributes
+        ----------
+        x: torch.Tensor
+            the input tensor
+
+        Returns
+        -------
+        torch.Tensor
+            the output tensor
+        '''
+        return self.lin2(nn.functional.relu(self.lin1(x)))
         
 class _SegmentationEmbedding(nn.Module):
     def __init__(self,
