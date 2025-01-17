@@ -17,6 +17,7 @@ class Embedding(nn.Module):
         super(Embedding, self).__init__()
         self.config = config
         self.token_embedding = nn.Embedding(config.vocab_size, config.model_dimension)
+        self.token_embedding.weight.data.uniform_(-0.1, 0.1)
         self.position_embeddings = _AbsolutePositionEmbedding(config)
         self.segment_embedding = _SegmentationEmbedding(config)
         self.layer_norm = nn.LayerNorm(config.model_dimension, eps=1e-12)
@@ -103,6 +104,49 @@ class MultiHeadAttention(nn.Module):
         output = self.out(context)
         return output
     
+class EncoderLayer(nn.Module):
+    def __init__(self, config):
+        ''' class for the encoder layer
+
+        Attributes
+        ----------
+        config: Config
+            the configuration of the model
+        '''
+        super(EncoderLayer, self).__init__()
+        self.config = config
+        self.attention = torch.nn.MultiheadAttention(config.model_dimension, 
+                                                     config.num_attention_heads, 
+                                                     config.dropout_prob)
+        self.feed_forward = FeedForwardNetwork(config)
+        self.dropout = nn.Dropout(config.dropout_prob)
+
+        self.layer_norm1 = nn.LayerNorm(config.model_dimension, eps=1e-12)
+        self.layer_norm2 = nn.LayerNorm(config.model_dimension, eps=1e-12)
+
+    def forward(self, x, mask=None):
+        '''forward pass for the encoder layer
+
+        Attributes
+        ----------
+        x: torch.Tensor
+            the input tensor
+        mask: torch.Tensor default = None
+            the mask tensor
+
+        Returns
+        -------
+        torch.Tensor
+            the output tensor
+        '''
+        attention_output = self.attention(x, mask)
+        attention_output = self.dropout(attention_output)
+        x = self.layer_norm1(x + attention_output)
+        feed_forward_output = self.feed_forward(x)
+        feed_forward_output = self.dropout(feed_forward_output)
+        x = self.layer_norm2(x + feed_forward_output)
+        return x
+
 class FeedForwardNetwork(nn.Module):
     def __init__(self, config):
         ''' class for the feed forward mlp layer
@@ -171,6 +215,13 @@ class _SegmentationEmbedding(nn.Module):
 
 class _AbsolutePositionEmbedding(nn.Module):
     def __init__(self, config):
+        ''' class for the absolute position embedding
+
+        Attributes
+        ----------
+        config: Config
+            the configuration of the model
+        '''
         super(_AbsolutePositionEmbedding, self).__init__()
         self.position_embeddings = nn.Embedding(config.sequence_length , config.model_dimension)
         #ininitilize the position embeddings with random weights
