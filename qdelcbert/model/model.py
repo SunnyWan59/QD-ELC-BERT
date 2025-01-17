@@ -141,11 +141,11 @@ class EncoderLayer(nn.Module):
         '''
         attention_output = self.attention(x, mask)
         attention_output = self.dropout(attention_output)
-        x = self.layer_norm1(x + attention_output)
-        feed_forward_output = self.feed_forward(x)
-        feed_forward_output = self.dropout(feed_forward_output)
-        x = self.layer_norm2(x + feed_forward_output)
-        return x
+        #we remove the residual connection between the attention and the feed forward network
+        attention_output = self.layer_norm1(attention_output) 
+        attention_output = self.feed_forward(attention_output)
+        attention_output = self.dropout(attention_output)
+        
 
 class FeedForwardNetwork(nn.Module):
     def __init__(self, config):
@@ -224,7 +224,6 @@ class _AbsolutePositionEmbedding(nn.Module):
         '''
         super(_AbsolutePositionEmbedding, self).__init__()
         self.position_embeddings = nn.Embedding(config.sequence_length , config.model_dimension)
-        #ininitilize the position embeddings with random weights
         nn.init.normal_(self.position_embeddings.weight, mean=0, std=0.02)
     
     def forward(self, input_ids):
