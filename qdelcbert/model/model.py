@@ -137,7 +137,7 @@ class EncoderLayer(nn.Module):
         Returns
         -------
         torch.Tensor
-            the output tenso
+            the output tensor
         '''
         attention_output = self.attention(x, mask)
         attention_output = self.dropout(attention_output)
